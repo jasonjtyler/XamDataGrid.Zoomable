@@ -23,38 +23,38 @@ namespace XamDataGrid.Zoomable
 
         public static readonly DependencyProperty ZoomMaximumProperty = DependencyProperty.RegisterAttached("ZoomMaximum", typeof(double), typeof(MouseWheelZooming), new PropertyMetadata(4.0));
 
-        public bool GetIsEnabled(DependencyObject item)
+        public static bool GetIsEnabled(DependencyObject item)
         {
             return (bool)item.GetValue(IsEnabledProperty);
         }
-        public void SetIsEnabled(DependencyObject item, bool value)
+        public static void SetIsEnabled(DependencyObject item, bool value)
         {
             item.SetValue(IsEnabledProperty, value);
         }
 
-        public double GetZoomAmount(DependencyObject item)
+        public static double GetZoomAmount(DependencyObject item)
         {
             return (double)item.GetValue(ZoomAmountProperty);
         }
-        public void SetZoomAmount(DependencyObject item, double value)
+        public static void SetZoomAmount(DependencyObject item, double value)
         {
             item.SetValue(ZoomAmountProperty, value);
         }
 
-        public double GetZoomMinimum(DependencyObject item)
+        public static double GetZoomMinimum(DependencyObject item)
         {
             return (double)item.GetValue(ZoomMinimumProperty);
         }
-        public void SetZoomMinimum(DependencyObject item, double value)
+        public static void SetZoomMinimum(DependencyObject item, double value)
         {
             item.SetValue(ZoomMinimumProperty, value);
         }
 
-        public double GetZoomMaximum(DependencyObject item)
+        public static double GetZoomMaximum(DependencyObject item)
         {
             return (double)item.GetValue(ZoomMaximumProperty);
         }
-        public void SetZoomMaximum(DependencyObject item, double value)
+        public static void SetZoomMaximum(DependencyObject item, double value)
         {
             item.SetValue(ZoomMaximumProperty, value);
         }
