@@ -1,8 +1,114 @@
 ﻿<Window x:Class="XamDataGrid.Zoomable.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="350" Width="525">
+        xmlns:igData="http://infragistics.com/DataPresenter"
+        xmlns:local="clr-namespace:XamDataGrid.Zoomable"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        Title="XamDataGrid Zooming" Height="350" Width="525">
+    <Window.Resources>
+
+        <local:PercentageToTextConverter x:Key="PercentageConverter" />
+
+        <Style x:Key="ZoomTransform" TargetType="Control">
+            <Setter Property="LayoutTransform">
+                <Setter.Value>
+                    <ScaleTransform ScaleX="{Binding RelativeSource={RelativeSource AncestorType=igData:XamDataGrid}, Path=(local:MouseWheelZooming.ZoomAmount)}"
+                                    ScaleY="{Binding RelativeSource={RelativeSource AncestorType=igData:XamDataGrid}, Path=(local:MouseWheelZooming.ZoomAmount)}" />
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <ControlTemplate x:Key="ZoomableScrollViewer" TargetType="ScrollViewer">
+            <ControlTemplate.Resources>
+                <Style TargetType="ScrollViewer" />
+            </ControlTemplate.Resources>
+            <Grid Background="{TemplateBinding Background}" Tag="{Binding}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <ScrollBar
+                x:Name="PART_VerticalScrollBar"
+                Grid.Column="2"
+                Minimum="0.0"
+                Maximum="{TemplateBinding ScrollableHeight}"
+                ViewportSize="{TemplateBinding ViewportHeight}"
+                Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=VerticalOffset, Mode=OneWay}"
+                Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"         
+                Cursor="Arrow"
+                AutomationProperties.AutomationId="VerticalScrollBar"/>
+                <ScrollBar
+                x:Name="PART_HorizontalScrollBar"
+                Orientation="Horizontal"
+                Grid.Row="1"
+                Grid.Column="1"
+                Minimum="0.0"
+                Maximum="{TemplateBinding ScrollableWidth}"
+                ViewportSize="{TemplateBinding ViewportWidth}"
+                Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=HorizontalOffset, Mode=OneWay}"
+                Visibility="Visible"
+                Cursor="Arrow"
+                AutomationProperties.AutomationId="HorizontalScrollBar"/>
+                <local:EditableComboBox Width="50" Grid.Column="0" Grid.Row="1" IsEditable="True" FontSize="11" Padding="0"
+                                                    Text="{Binding RelativeSource={RelativeSource AncestorType=igData:XamDataGrid}, Path=(local:MouseWheelZooming.ZoomAmount), 
+                                                            Mode=TwoWay, UpdateSourceTrigger=Explicit, Converter={StaticResource PercentageConverter}, ConverterParameter=%}">
+                    <local:EditableComboBox.ItemsSource>
+                        <x:Array Type="{x:Type sys:Double}">
+                            <sys:Double>20</sys:Double>
+                            <sys:Double>50</sys:Double>
+                            <sys:Double>70</sys:Double>
+                            <sys:Double>100</sys:Double>
+                            <sys:Double>150</sys:Double>
+                            <sys:Double>200</sys:Double>
+                            <sys:Double>400</sys:Double>
+                        </x:Array>
+                    </local:EditableComboBox.ItemsSource>
+                    <local:EditableComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock>
+                            <TextBlock.Inlines>
+                                <Run Text="{Binding Mode=OneWay}" />
+                                <Run Text="%" />
+                            </TextBlock.Inlines>
+                            </TextBlock>
+                        </DataTemplate>
+                    </local:EditableComboBox.ItemTemplate>
+                </local:EditableComboBox>
+                <ScrollContentPresenter 
+                x:Name="PART_ScrollContentPresenter"
+                Grid.ColumnSpan="2"
+                Margin="{TemplateBinding Padding}"
+                Content="{TemplateBinding Content}"
+                ContentTemplate="{TemplateBinding ContentTemplate}"
+                CanContentScroll="{TemplateBinding CanContentScroll}"/>
+                <Rectangle 
+                x:Name="Corner"
+                Grid.Column="2"
+                Grid.Row="1"
+                Fill="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+            </Grid>
+        </ControlTemplate>
+
+        <Style TargetType="igData:RecordListControl">
+            <Style.Resources>
+                <Style TargetType="ScrollViewer">
+                    <Setter Property="Template" Value="{StaticResource ZoomableScrollViewer}" />
+                </Style>
+            </Style.Resources>
+        </Style>
+
+    </Window.Resources>
     <Grid>
-        
+        <igData:XamDataGrid local:MouseWheelZooming.IsEnabled="True" local:MouseWheelZooming.ZoomAmount="4" DataSource="{Binding}"  GroupByAreaLocation="None">
+            <igData:XamDataGrid.FieldLayoutSettings>
+                <igData:FieldLayoutSettings DataRecordCellAreaStyle="{StaticResource ZoomTransform}" 
+                                            HeaderLabelAreaStyle="{StaticResource ZoomTransform}" />
+            </igData:XamDataGrid.FieldLayoutSettings>
+        </igData:XamDataGrid>
     </Grid>
 </Window>

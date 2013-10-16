@@ -22,6 +22,9 @@ namespace XamDataGrid.Zoomable
         public MainWindow()
         {
             InitializeComponent();
+
+            this.DataContext = Person.CreatePersons();
+
         }
     }
 }
