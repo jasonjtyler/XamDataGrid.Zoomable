@@ -104,7 +104,7 @@
 
     </Window.Resources>
     <Grid>
-        <igData:XamDataGrid local:MouseWheelZooming.IsEnabled="True" local:MouseWheelZooming.ZoomAmount="4" DataSource="{Binding}"  GroupByAreaLocation="None">
+        <igData:XamDataGrid local:MouseWheelZooming.IsEnabled="True" DataSource="{Binding}"  GroupByAreaLocation="None">
             <igData:XamDataGrid.FieldLayoutSettings>
                 <igData:FieldLayoutSettings DataRecordCellAreaStyle="{StaticResource ZoomTransform}" 
                                             HeaderLabelAreaStyle="{StaticResource ZoomTransform}" />
